@@ -1,16 +1,59 @@
-# flutter_os_version_test_example
+```$xslt
+import 'package:flutter/material.dart';
+import 'dart:async';
 
-Demonstrates how to use the flutter_os_version_test plugin.
+import 'package:flutter/services.dart';
+import 'package:flutter_os_version_test/flutter_os_version_test.dart';
 
-## Getting Started
+void main() => runApp(MyApp());
 
-This project is a starting point for a Flutter application.
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
-A few resources to get you started if this is your first Flutter project:
+class _MyAppState extends State<MyApp> {
+  String _platformVersion = 'Unknown';
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await FlutterOsVersionTest.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Center(
+          child: Text('Running on: $_platformVersion\n'),
+        ),
+      ),
+    );
+  }
+}
+
+```

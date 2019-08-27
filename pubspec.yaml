@@ -1,8 +1,8 @@
 name: flutter_os_version_test
 description: A new Flutter project for OS check
 version: 0.0.1
-author:
-homepage:
+author: Shashank Thakur <shashank.thakur@gmail.com>
+homepage: https://github.com/ShashankThakur/flutter_os_version_test
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
